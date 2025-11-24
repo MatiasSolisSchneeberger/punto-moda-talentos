@@ -1,25 +1,19 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import Button from './components/Button'
-import { IconArrowLeft, IconInfinity } from '@tabler/icons-react'
-import ButtonIcon from './components/ButtonIcon'
+import Navbar from '/src/section/Navbar'
+import { Routes, Route } from 'react-router-dom'
+import Productos from './pages/Productos.jsx'
+import Index from './pages/Index.jsx'
+import DetalleProducto from './pages/Producto.jsx'
 
 function App() {
     return (
         <>
-            <Button style={"primary"}
-                iconLeft={
-                    <IconArrowLeft size={20} />
-                }
-            >
-                Boton re fachero
-            </Button>
-
-            <ButtonIcon style='secondary'>
-                <IconInfinity size={20} />
-            </ButtonIcon>
-            <ButtonTheme ></ButtonTheme>
+            <Navbar user={{ isLoggedIn: true, name: "Matias Solis Schneeberger", nickname: "@MatiasSS100605" }} />
+            <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/productos" element={<Productos />} />
+                <Route path="/productos/:slug" element={<DetalleProducto />} />
+            </Routes>
         </>
     )
 }

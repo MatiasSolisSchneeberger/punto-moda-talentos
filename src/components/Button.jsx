@@ -26,7 +26,7 @@ const Button = ({
             case 'secondary':
                 return 'bg-secondary-400 text-secondary-800 dark:bg-secondary-600 dark:text-secondary-200';
             case 'tertiary':
-                return 'text-tertiary-600 outline-1 outline-tertiary-600 not-disabled:hover:outline-2';
+                return 'text-tertiary-600 outline-1 outline-tertiary-600 not-disabled:hover:outline-2 dark:text-tertiary-400 dark:outline-tertiary-400';
             case 'text':
                 return `text-text-800 underline decoration-text-800 underline-offset-4 not-disabled:hover:text-text-700 not-disabled:hover:decoration-text-700 not-disabled:hover:decoration-2 
 					${!href
@@ -34,13 +34,13 @@ const Button = ({
                         : ''
                     }`;
             case 'danger':
-                return 'bg-danger-600 text-danger-100';
+                return 'bg-danger-600 text-danger-100 dark:bg-danger-400 dark:text-danger-900';
             case 'warning':
-                return 'bg-warning-600 text-warning-100';
+                return 'bg-warning-600 text-warning-100 dark:bg-warning-400 dark:text-warning-900';
             case 'success':
-                return 'bg-success-600 text-success-100';
+                return 'bg-success-600 text-success-100 dark:bg-success-400 dark:text-success-900';
             case 'info':
-                return 'bg-info-600 text-info-100';
+                return 'bg-info-600 text-info-100 dark:bg-info-400 dark:text-info-900';
             default:
                 return '';
         }
@@ -48,7 +48,7 @@ const Button = ({
 
     const fullClassName = `${baseClasses} ${styleClasses} ${className}`;
 
-    
+
     // El componente en sí
     if (href) {
         // Renderiza <a> si tiene href y no está disabled

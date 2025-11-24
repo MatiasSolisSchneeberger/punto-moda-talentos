@@ -1,7 +1,11 @@
 @import "tailwindcss";
 
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 @custom-variant dark (&:where(.dark, .dark *));
+
+
+
 @theme inline {
 	/* primary */
 	--color-primary-50: var(--primary-50);
@@ -119,10 +123,29 @@
 	--color-info-800: var(--info-800);
 	--color-info-900: var(--info-900);
 	--color-info-950: var(--info-950);
+
+
+    /* Definimos la animación personalizada aquí */
+    --animate-infinite-scroll: infinite-scroll 25s linear infinite;
+
+    /* fuentes */
+    --font-main: var(--font-family-base);
+
+    /* Definimos los keyframes */
+    @keyframes infinite-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+    }   
+
 }
 
 @layer base {
 	:root {
+		color-scheme: light;
 		--primary-l: 47.293%;
 		--primary-c: 0.04981;
 		--primary-h: 175.155;
@@ -253,37 +276,148 @@
 		--info-800: oklch(from var(--info) calc(l - 0.12) calc(c * 0.68) calc(h + 3));
 		--info-900: oklch(from var(--info) calc(l - 0.18) calc(c * 0.6) calc(h + 6));
 		--info-950: oklch(from var(--info) calc(l - 0.226) calc(c * 0.47) calc(h + 9));
+
+        --font-family-base: "Montserrat", sans-serif;
 	}
+
+    .dark {
+        color-scheme: dark;
+    }
+
+    html,
+	body {
+		/* scroll-behavior: smooth; */
+		margin: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
+	}
+
+}
+
+/* Select Base Styles */
+select,
+::picker(select) {
+    appearance: base-select;
+    background-color: light-dark(var(--color-background-50), var(--color-background-800));
+    border: 2px solid light-dark(var(--color-secondary-400), var(--color-secondary-600));
+    border-radius: 12px;
+    padding: 8px;
+    cursor: pointer;
+    color: light-dark(var(--color-secondary-600), var(--color-secondary-400));
+    font-family: var(--font-family-base);
+    font-size: 0.875rem;
+    line-height: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.025em;
+}
+
+/* Select Hover State */
+select:hover {
+    background-color: light-dark(var(--color-primary-100), var(--color-primary-900));
+    color: light-dark(var(--color-primary-600), var(--color-primary-400));
+    transition: 0.2s all ease-in-out;
+    outline: 2px solid light-dark(var(--color-secondary-400), var(--color-secondary-600));
+}
+
+/* Picker Specifics */
+::picker(select) {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    background-color: light-dark(var(--color-background-50), var(--color-background-800));
+}
+
+/* Picker Icon */
+select::picker-icon {
+    color: var(--color-primary-500);
+    transition: 0.2s rotate ease-in-out;
+    content: "";
+    width: 1.2em;
+    height: 1.2em;
+    background-color: currentColor;
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon icon-tabler icons-tabler-outline icon-tabler-chevron-down'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M6 9l6 6l6 -6' /></svg>");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+}
+
+select:open::picker-icon {
+    rotate: 180deg;
+}
+
+/* Separator */
+select > hr {
+    border: 2px solid light-dark(var(--color-background-300), var(--color-background-700));
+    border-radius: 999px;
+}
+
+/* Options */
+option {
+    padding: 8px;
+    border-radius: 8px;
+    color: light-dark(var(--color-text-900), var(--color-text-50));
+}
+
+option:hover {
+    background-color: light-dark(var(--color-primary-100), var(--color-primary-800));
+    transition: 0.2s all ease-in-out;
+}
+
+/* Checkmark */
+option::checkmark {
+    color: light-dark(var(--color-primary-600), var(--color-primary-400));
+    content: "";
+    width: 1.2em;
+    height: 1.2em;
+    background-color: currentColor;
+    mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon icon-tabler icons-tabler-outline icon-tabler-check'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M5 12l5 5l10 -10' /></svg>");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+}
+
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mask-gradient-x {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 
 .texto-display {
-	font-family: "Montserrat", sans-serif;
 	font-size: 3rem; /* text-5xl */
 	line-height: 3.25rem; /* leading-13 */
 	font-weight: 600; /* font-semibold */
 }
 .texto-headline {
-	font-family: "Montserrat", sans-serif;
+	font-family: var(--font-family-base);
 	font-size: 1.875rem; /* text-3xl */
 	line-height: 2.25rem; /* leading-9 */
 	font-weight: 500; /* font-medium */
 }
 .texto-title {
-	font-family: "Montserrat", sans-serif;
+	font-family: var(--font-family-base);
 	font-size: 1rem; /* text-base */
 	line-height: 1.5rem; /* leading-6 */
 	font-weight: 500; /* font-medium */
 	letter-spacing: 0.025em; /* tracking-wide */
 }
 .texto-body {
-	font-family: "Montserrat", sans-serif;
+	font-family: var(--font-family-base);
 	font-size: 0.875rem; /* text-sm */
 	line-height: 1.25rem; /* leading-5 */
 	font-weight: 300; /* font-light */
 	letter-spacing: 0.025em; /* tracking-wide */
 }
 .texto-label {
-	font-family: "Montserrat", sans-serif;
+	font-family: var(--font-family-base);
 	font-size: 0.875rem; /* text-sm */
 	line-height: 1rem; /* leading-4 */
 	font-weight: 400; /* font-normal */
