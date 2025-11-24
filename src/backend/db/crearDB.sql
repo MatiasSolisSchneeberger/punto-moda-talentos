@@ -13,7 +13,8 @@ create table products (
   name text not null,
   description text,
   price numeric(10, 2) not null, -- Precio base o de muestra
-  created_at timestamptz default now()
+  created_at timestamptz default now(),
+  category text
 );
 
 -- 3. Variantes de Productos (Lo que realmente se compra)
