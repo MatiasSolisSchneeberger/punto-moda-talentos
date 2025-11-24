@@ -1,5 +1,8 @@
 import User from './User.js';
-import Product from './Producto.js';
+import Product from './Product.js';
+import ProductVariant from './ProductVariant.js';
+import VariantAttribute from './VariantAttribute.js';
+import ProductImage from './ProductImage.js';
 import Review from './Review.js';
 import Cart from './Cart.js';
 import CartItem from './CartItem.js';
@@ -15,26 +18,48 @@ Review.belongsTo(User, { foreignKey: 'user_id' });
 Product.hasMany(Review, { foreignKey: 'product_id' });
 Review.belongsTo(Product, { foreignKey: 'product_id' });
 
-// 3. Producto recursivo (parent_id)
-Product.hasMany(Product, { as: 'variantes', foreignKey: 'parent_id' });
-Product.belongsTo(Product, { as: 'padre', foreignKey: 'parent_id' });
+// 3. Producto y Variantes
+Product.hasMany(ProductVariant, { foreignKey: 'product_id' });
+ProductVariant.belongsTo(Product, { foreignKey: 'product_id' });
 
-// 4. Carrito: Relación Muchos a Muchos usando tabla intermedia
-Cart.belongsToMany(Product, { through: CartItem, foreignKey: 'cart_id' });
-Product.belongsToMany(Cart, { through: CartItem, foreignKey: 'product_id' });
+// 4. Variantes y Atributos
+ProductVariant.hasMany(VariantAttribute, { foreignKey: 'product_variant_id' });
+VariantAttribute.belongsTo(ProductVariant, { foreignKey: 'product_variant_id' });
 
-// 5. Relación Usuario -> Carrito
+// 5. Producto e Imágenes
+Product.hasMany(ProductImage, { foreignKey: 'product_id' });
+ProductImage.belongsTo(Product, { foreignKey: 'product_id' });
+
+// 6. Carrito y Items (A través de Variantes)
+Cart.hasMany(CartItem, { foreignKey: 'cart_id' });
+CartItem.belongsTo(Cart, { foreignKey: 'cart_id' });
+ProductVariant.hasMany(CartItem, { foreignKey: 'product_variant_id' });
+CartItem.belongsTo(ProductVariant, { foreignKey: 'product_variant_id' });
+
+// 7. Relación Usuario -> Carrito
 User.hasOne(Cart, { foreignKey: 'user_id' });
 Cart.belongsTo(User, { foreignKey: 'user_id' });
 
-
-// 6. Orden y OrderItems
+// 8. Orden y OrderItems
 Order.hasMany(OrderItem, { foreignKey: 'order_id' });
 OrderItem.belongsTo(Order, { foreignKey: 'order_id' });
+ProductVariant.hasMany(OrderItem, { foreignKey: 'product_variant_id' });
+OrderItem.belongsTo(ProductVariant, { foreignKey: 'product_variant_id' });
 
-// 7. Wishlist
+// 9. Wishlist
 User.belongsToMany(Product, { through: Wishlist, foreignKey: 'user_id' });
 Product.belongsToMany(User, { through: Wishlist, foreignKey: 'product_id' });
 
-// Exportar todo junto si quieres
-export { User, Product, Review, Cart, CartItem, Order, OrderItem, Wishlist };
+export {
+    User,
+    Product,
+    ProductVariant,
+    VariantAttribute,
+    ProductImage,
+    Review,
+    Cart,
+    CartItem,
+    Order,
+    OrderItem,
+    Wishlist
+};

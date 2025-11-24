@@ -6,9 +6,9 @@ const OrderItem = sequelize.define('OrderItem', {
         type: DataTypes.BIGINT,
         allowNull: true // references orders(id)
     },
-    product_id: {
+    product_variant_id: {
         type: DataTypes.BIGINT,
-        allowNull: true // references products(id)
+        allowNull: true // references product_variants(id)
     },
     quantity: {
         type: DataTypes.INTEGER,

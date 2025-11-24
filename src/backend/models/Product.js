@@ -13,11 +13,9 @@ const Product = sequelize.define('Product', {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
     },
-    stock: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0, // Lo que agregaste después
-        allowNull: false
-    },
+    category: {
+        type: DataTypes.TEXT,
+    }
 }, {
     tableName: 'products',
     timestamps: true,
