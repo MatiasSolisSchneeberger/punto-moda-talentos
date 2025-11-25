@@ -6,43 +6,81 @@ import Button from '/src/components/Button';
 import ButtonIcon from '/src/components/ButtonIcon';
 import Avatar from '/src/components/Avatar';
 import ButtonTheme from '/src/components/ButtonTheme';
-import { IconMenu2, IconSearch, IconX, IconLogout, IconClothesRack, IconShoeOff, IconShirt, IconShoe, IconPerfume } from '@tabler/icons-react';
+import { IconMenu2, IconSearch, IconX, IconLogout, IconShirt, IconShoe, IconPerfume } from '@tabler/icons-react';
 import Menu from '/src/components/Menu';
 import MenuItem from '/src/components/MenuItem';
-import Divider from '/src/components/Divider';
 import MenuSection from '../components/MenuSection';
 
-const Navbar = ({ currentPage, user, ...props }) => {
-    // 1. ESTADO: Controla la visibilidad del menú móvil.
+const Navbar = ({ currentPage, user, onLogout, ...props }) => {
+    // 1. ESTADO: Controla la visibilidad del menú móvil y dropdown de perfil.
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
     // 2. USE MEMO: Genera los botones de autenticación condicionalmente (DESKTOP).
     const authControlsDesktop = useMemo(() => {
         if (user?.isLoggedIn) {
-            // USUARIO AUTENTICADO: Muestra el Avatar
+            // USUARIO AUTENTICADO: Muestra el Avatar con Dropdown
             return (
-                <li className="flex justify-center gap-3">
-                    <Link to="/perfil">
+                <li className="relative flex justify-center gap-3">
+                    <button
+                        onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                        className="focus:outline-none"
+                    >
                         <Avatar
                             img={user.img}
                             name={user.name}
                         />
-                    </Link>
+                    </button>
+
+                    {/* Dropdown Menu usando componentes Menu */}
+                    {isProfileMenuOpen && (
+                        <>
+                            <div
+                                className="fixed inset-0 z-40"
+                                onClick={() => setIsProfileMenuOpen(false)}
+                            ></div>
+                            <div className="absolute right-0 mt-12 w-56 z-50">
+                                <Menu>
+                                    <MenuSection>
+                                        <MenuItem
+                                            text="Mi Perfil"
+                                            href="/perfil"
+                                            onClick={() => setIsProfileMenuOpen(false)}
+                                        />
+                                        <MenuItem
+                                            text="Cerrar Sesión"
+                                            button={
+                                                <ButtonIcon
+                                                    style="danger"
+                                                    onClick={() => {
+                                                        onLogout();
+                                                        setIsProfileMenuOpen(false);
+                                                    }}
+                                                >
+                                                    <IconLogout size={20} />
+                                                </ButtonIcon>
+                                            }
+                                        />
+                                    </MenuSection>
+                                </Menu>
+                            </div>
+                        </>
+                    )}
                 </li>
             );
         } else {
             return (
                 <li className="flex flex-row gap-3">
-                    <Button style="secondary" href="/iniciar-sesion" className="">
+                    <Button style="secondary" href="/login" className="">
                         Iniciar Sesión
                     </Button>
-                    <Button style="primary" href="/registrarse">
+                    <Button style="primary" href="/register">
                         Registrarse
                     </Button>
                 </li>
             );
         }
-    }, [user]);
+    }, [user, isProfileMenuOpen, onLogout]);
 
     // 3. CONTENIDO DEL MENÚ MÓVIL
     const mobileMenuContent = useMemo(() => {
@@ -52,13 +90,15 @@ const Navbar = ({ currentPage, user, ...props }) => {
                     <MenuItem
                         avatar={{ img: user.img, name: user.name }}
                         text={user.name}
-                        textHelp={user.nickname || "@ " + user.name}
+                        textHelp={user.email || ""}
                         href="/perfil"
                         button={
                             <ButtonIcon
                                 style="danger"
-                                onClick={() => setIsMenuOpen(false)}
-                                href="/logout"
+                                onClick={() => {
+                                    onLogout();
+                                    setIsMenuOpen(false);
+                                }}
                             >
                                 <IconLogout size={20} />
                             </ButtonIcon>
@@ -74,7 +114,7 @@ const Navbar = ({ currentPage, user, ...props }) => {
                         button={
                             <Button
                                 style="secondary"
-                                href="/iniciar-sesion"
+                                href="/login"
                             >
                                 Iniciar Sesión
                             </Button>
@@ -84,7 +124,7 @@ const Navbar = ({ currentPage, user, ...props }) => {
                         button={
                             <Button
                                 style="primary"
-                                href="/registrarse"
+                                href="/register"
                             >
                                 Registrarse
                             </Button>
@@ -93,7 +133,7 @@ const Navbar = ({ currentPage, user, ...props }) => {
                 </MenuSection>
             );
         }
-    }, [user]);
+    }, [user, onLogout]);
 
     // Botón de búsqueda (Desktop)
     const buscarButtonDesktop = (
