@@ -6,6 +6,8 @@ import Index from './pages/Index.jsx'
 import DetalleProducto from './pages/Producto.jsx'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
+import Carrito from './pages/Carrito.jsx'
+import Wishlist from './pages/WishList.jsx'
 
 function App() {
     // estado del usuario (null si no)
@@ -41,9 +43,10 @@ function App() {
                 <Route path="/" element={<Index />} />
                 <Route path="/productos" element={<Productos />} />
                 <Route path="/productos/:slug" element={<DetalleProducto />} />
-
+                <Route path="/carrito" element={<Carrito />} />
                 <Route path="/login" element={<Login onLogin={handleLogin} />} />
                 <Route path="/register" element={<Register onRegister={handleLogin} />} />
+                <Route path="/wishlist" element={<Wishlist />} />
             </Routes>
         </>
     )

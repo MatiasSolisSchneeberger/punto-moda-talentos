@@ -48,6 +48,16 @@ const Navbar = ({ currentPage, user, onLogout, ...props }) => {
                                             onClick={() => setIsProfileMenuOpen(false)}
                                         />
                                         <MenuItem
+                                            text="Mi Carrito"
+                                            href="/carrito"
+                                            onClick={() => setIsProfileMenuOpen(false)}
+                                        />
+                                        <MenuItem
+                                            text="Mis Favoritos"
+                                            href="/wishlist"
+                                            onClick={() => setIsProfileMenuOpen(false)}
+                                        />
+                                        <MenuItem
                                             text="Cerrar Sesión"
                                             button={
                                                 <ButtonIcon
@@ -103,6 +113,16 @@ const Navbar = ({ currentPage, user, onLogout, ...props }) => {
                                 <IconLogout size={20} />
                             </ButtonIcon>
                         }
+                    />
+                    <MenuItem
+                        text="Mi Carrito"
+                        href="/carrito"
+                        onClick={() => setIsMenuOpen(false)}
+                    />
+                    <MenuItem
+                        text="Mis Favoritos"
+                        href="/wishlist"
+                        onClick={() => setIsMenuOpen(false)}
                     />
                 </MenuSection>
 

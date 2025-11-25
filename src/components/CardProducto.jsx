@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonIcon from "./ButtonIcon";
 import Button from "./Button";
 import { IconArrowRight, IconDiscount, IconDiscount2, IconHeart, IconHeartFilled, IconShoppingCart, IconShoppingCartPlus } from "@tabler/icons-react";
@@ -7,8 +7,44 @@ import Chip from "./Chip";
 const CardProducto = ({ producto }) => {
     const [liked, setLiked] = useState(false);
 
-    const handleLike = () => {
+    const userStored = localStorage.getItem('user');
+    const user = userStored ? JSON.parse(userStored) : null;
+
+    // 1. Verifico si ya le dió like al cargar el componente
+    useEffect(() => {
+        if (user && producto?.id) {
+            fetch(`http://localhost:3000/api/wishlist/check/${user.id}/${producto.id}`)
+                .then(res => res.json())
+                .then(data => setLiked(data.isInWishlist))
+                .catch(err => console.error(err));
+        }
+    }, [user, producto]);
+
+    const handleLike = async () => {
+        if (!user) return alert("Inicia sesión para guardar favoritos");
+
+        // Optimismo visual: cambiamos el icono antes de que responda el servidor
+        const previousState = liked;
         setLiked(!liked);
+
+        try {
+            const response = await fetch('http://localhost:3000/api/wishlist/toggle', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: user.id,
+                    productId: producto.id
+                })
+            });
+
+            if (!response.ok) {
+                // Si falló, volvemos al estado anterior
+                setLiked(previousState);
+            }
+        } catch (error) {
+            setLiked(previousState);
+            console.error("Error al dar like:", error);
+        }
     }
 
     // Destructure with defaults based on JSON structure
@@ -19,7 +55,7 @@ const CardProducto = ({ producto }) => {
             url: "/images/productos/remera.png",
             alt: "Producto"
         }],
-        slug = "",
+        id = "",
         chip = {
             visible: false,
             label: "",
@@ -27,7 +63,7 @@ const CardProducto = ({ producto }) => {
         }
     } = producto || {};
 
-    const href = `/productos/${slug}`;
+    const href = `/productos/${id}`;
     const precioRegular = precio.regular;
     const precioOferta = precio.oferta;
     const tieneOferta = precioOferta !== null && precioOferta < precioRegular;

@@ -26,7 +26,7 @@ const Chip = ({
         let classes = '';
 
         // Clase base que aplica a todos los estilos
-        const baseClass = "flex w-min transition-colors flex-row transition-all ease-in-out items-center rounded-xl px-2 py-1 outline outline-1 " + (className || '');
+        const baseClass = "flex w-min transition-all flex-row ease-in-out duration-300 items-center rounded-xl px-2 py-1 outline outline-1 " + (className || '');
 
         // Lógica de estilos cuando el chip está SELECCIONADO (selection = true)
         if (selection) {
