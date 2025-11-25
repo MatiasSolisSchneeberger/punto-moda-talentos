@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect, useMemo } from 'react';
-import productosData from '../data/productos.json';
 import Button from '../components/Button';
 import { IconShoppingCartPlus, IconShoppingCart, IconHeart, IconHeartFilled, IconArrowLeft, IconCheck, IconX, IconMinus, IconPlus } from '@tabler/icons-react';
 import ButtonIcon from '../components/ButtonIcon';
