@@ -6,7 +6,7 @@ import Button from '/src/components/Button';
 import ButtonIcon from '/src/components/ButtonIcon';
 import Avatar from '/src/components/Avatar';
 import ButtonTheme from '/src/components/ButtonTheme';
-import { IconMenu2, IconSearch, IconX, IconLogout, IconShirt, IconShoe, IconPerfume } from '@tabler/icons-react';
+import { IconMenu2, IconSearch, IconX, IconLogout, IconShirt, IconShoe, IconPerfume, IconShoppingCart, IconUser, IconHeart } from '@tabler/icons-react';
 import Menu from '/src/components/Menu';
 import MenuItem from '/src/components/MenuItem';
 import MenuSection from '../components/MenuSection';
@@ -45,16 +45,19 @@ const Navbar = ({ currentPage, user, onLogout, ...props }) => {
                                         <MenuItem
                                             text="Mi Perfil"
                                             href="/perfil"
+                                            iconLeft={<IconUser size={20} />}
                                             onClick={() => setIsProfileMenuOpen(false)}
                                         />
                                         <MenuItem
                                             text="Mi Carrito"
+                                            iconLeft={<IconShoppingCart size={20} />}
                                             href="/carrito"
                                             onClick={() => setIsProfileMenuOpen(false)}
                                         />
                                         <MenuItem
                                             text="Mis Favoritos"
                                             href="/wishlist"
+                                            iconLeft={<IconHeart size={20} />}
                                             onClick={() => setIsProfileMenuOpen(false)}
                                         />
                                         <MenuItem

@@ -99,7 +99,7 @@ const Carrito = () => {
                         const talle = variant?.VariantAttributes?.find(a => a.attribute_name === 'Talle')?.attribute_value;
 
                         return (
-                            <article key={item.id} className="flex gap-4 p-4 rounded-2xl bg-background-100 dark:bg-background-900 border border-background-300 dark:border-background-700 shadow-sm">
+                            <article key={item.id} className="flex gap-4 p-3 rounded-3xl bg-background-100 dark:bg-background-900 border border-background-300 dark:border-background-700 shadow-sm">
                                 {/* Imagen */}
                                 <div className="w-24 h-24 shrink-0 rounded-xl overflow-hidden bg-white">
                                     <img src={image} alt={product?.name} className="w-full h-full object-cover" />
@@ -109,10 +109,10 @@ const Carrito = () => {
                                 <div className="flex-1 flex flex-col justify-between">
                                     <div className="flex justify-between items-start">
                                         <div>
-                                            <h3 className="font-bold text-lg text-text-900 dark:text-text-100 line-clamp-1">
+                                            <h3 className="texto-title text-primary-600 dark:text-primary-400">
                                                 {product?.name || "Producto"}
                                             </h3>
-                                            <p className="text-sm text-text-500">
+                                            <p className="texto-body text-text-500">
                                                 {color && <span className="capitalize">{color}</span>}
                                                 {talle && <span className="uppercase"> / {talle}</span>}
                                             </p>
@@ -123,10 +123,10 @@ const Carrito = () => {
                                     </div>
 
                                     <div className="flex justify-between items-end">
-                                        <span className="text-sm bg-background-200 dark:bg-background-800 px-2 py-1 rounded-lg font-medium">
+                                        <span className="texto-lable bg-background-200 dark:bg-background-800 px-2 py-1 rounded-lg font-medium">
                                             Cant: {item.quantity}
                                         </span>
-                                        <span className="text-xl font-bold text-primary-600 dark:text-primary-400">
+                                        <span className="texto-title text-primary-600 dark:text-primary-400">
                                             ${(parseFloat(variant?.price) * item.quantity).toLocaleString('es-AR')}
                                         </span>
                                     </div>

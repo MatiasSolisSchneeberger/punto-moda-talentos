@@ -7,17 +7,17 @@ const BentoHero = () => {
         {
             name: "Remeras",
             img: "/image/productos/remeras.png",
-            href: "/remeras"
+            href: "/productos?categoria=remera"
         },
         {
-            name: "Perfumes",
-            img: "/image/productos/perfumes.jpg",
-            href: "/perfumes"
+            name: "Pantalones",
+            img: "/image/productos/pantalones.jpg",
+            href: "/productos?categoria=pantalon"
         },
         {
             name: "Zapatillas",
             img: "/image/productos/zapatillas.jpg",
-            href: "/zapatillas"
+            href: "/productos?categoria=zapatilla"
         },
     ]
 

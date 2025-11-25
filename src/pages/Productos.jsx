@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import CardProducto from "../components/CardProducto";
 import FiltrosProductos from "../components/FiltrosProductos";
 import Button from '../components/Button';
 
 function Productos() {
+    const [searchParams] = useSearchParams();
     const [productos, setProductos] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [filters, setFilters] = useState({});
@@ -73,6 +75,14 @@ function Productos() {
 
         fetchProductos();
     }, []);
+
+    // Aplicar filtro de categoría desde URL al cargar
+    useEffect(() => {
+        const categoriaFromUrl = searchParams.get('categoria');
+        if (categoriaFromUrl) {
+            setFilters(prev => ({ ...prev, categoria: categoriaFromUrl }));
+        }
+    }, [searchParams]);
 
     // 2. LÓGICA DE FILTROS (Igual que antes)
     useEffect(() => {

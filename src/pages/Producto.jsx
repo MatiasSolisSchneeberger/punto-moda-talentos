@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect, useMemo } from 'react';
 import productosData from '../data/productos.json';
 import Button from '../components/Button';
-import { IconShoppingCartPlus, IconHeart, IconHeartFilled, IconArrowLeft, IconCheck, IconX, IconMinus, IconPlus } from '@tabler/icons-react';
+import { IconShoppingCartPlus, IconShoppingCart, IconHeart, IconHeartFilled, IconArrowLeft, IconCheck, IconX, IconMinus, IconPlus } from '@tabler/icons-react';
 import ButtonIcon from '../components/ButtonIcon';
 import Chip from '../components/Chip';
 import Avatar from '../components/Avatar';
@@ -19,10 +19,14 @@ function Producto() {
 
     // visuales
     const [selectedImage, setSelectedImage] = useState(0);
-    const [liked, setLiked] = useState(false);
+
+    // wishlist
+    const [isInWishlist, setIsInWishlist] = useState(false);
+    const [loadingWishlist, setLoadingWishlist] = useState(false);
 
     // carrito
     const [agregando, setAgregando] = useState(false);
+    const [addedToCart, setAddedToCart] = useState(false);
 
     // Estados de carga y error
     const [loading, setLoading] = useState(true);
@@ -57,6 +61,25 @@ function Producto() {
             fetchProducto();
         }
     }, [slug]);
+
+    // --- VERIFICAR SI ESTÁ EN WISHLIST ---
+    useEffect(() => {
+        const checkWishlistStatus = async () => {
+            const userStored = localStorage.getItem('user');
+            if (!userStored || !producto) return;
+
+            const user = JSON.parse(userStored);
+            try {
+                const response = await fetch(`http://localhost:3000/api/wishlist/check/${user.id}/${producto.id}`);
+                const data = await response.json();
+                setIsInWishlist(data.isInWishlist);
+            } catch (error) {
+                console.error('Error al verificar wishlist:', error);
+            }
+        };
+
+        checkWishlistStatus();
+    }, [producto]);
 
     // --- LÓGICA INTELIGENTE: CALCULAR OPCIONES ---
 
@@ -105,6 +128,33 @@ function Producto() {
         }
     };
 
+    const handleToggleWishlist = async () => {
+        const userStored = localStorage.getItem('user');
+        if (!userStored) return alert("Debes iniciar sesión para agregar a favoritos");
+
+        setLoadingWishlist(true);
+        try {
+            const user = JSON.parse(userStored);
+            const response = await fetch('http://localhost:3000/api/wishlist/toggle', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: user.id,
+                    productId: producto.id
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setIsInWishlist(data.action === 'added');
+            }
+        } catch (error) {
+            console.error('Error al actualizar wishlist:', error);
+        } finally {
+            setLoadingWishlist(false);
+        }
+    };
+
     const handleAddToCart = async () => {
         const userStored = localStorage.getItem('user');
         if (!userStored) return alert("Debes iniciar sesión");
@@ -126,8 +176,12 @@ function Producto() {
                 })
             });
 
-            if (response.ok) alert("¡Agregado al carrito!");
-            else alert("Error al agregar");
+            if (response.ok) {
+                setAddedToCart(true);
+                alert("¡Agregado al carrito!");
+            } else {
+                alert("Error al agregar");
+            }
         } catch (error) {
             console.error(error);
         } finally {
@@ -185,11 +239,12 @@ function Producto() {
                             className="w-full h-full object-cover"
                         />
                         <ButtonIcon
-                            onClick={() => setLiked(!liked)}
+                            onClick={handleToggleWishlist}
                             style="secondary"
                             className="absolute top-4 right-4"
+                            disabled={loadingWishlist}
                         >
-                            {liked ? <IconHeartFilled className="text-danger-600" /> : <IconHeart />}
+                            {isInWishlist ? <IconHeartFilled className="text-danger-600" /> : <IconHeart />}
                         </ButtonIcon>
                     </div>
 
@@ -299,18 +354,29 @@ function Producto() {
                         </div>
 
                         <div className="flex gap-3 mt-4">
-                            <Button
-                                style="primary"
-                                iconLeft={<IconShoppingCartPlus />}
-                                className="w-full py-4 text-lg"
-                                onClick={handleAddToCart}
-                                disabled={agregando || !varianteSeleccionada || varianteSeleccionada.stock === 0}
-                            >
-                                {varianteSeleccionada?.stock === 0
-                                    ? "Sin Stock"
-                                    : agregando ? "Agregando..." : "Agregar al Carrito"
-                                }
-                            </Button>
+                            {addedToCart ? (
+                                <Button
+                                    style="secondary"
+                                    iconLeft={<IconShoppingCart />}
+                                    className="w-full py-4 text-lg"
+                                    href="/carrito"
+                                >
+                                    Ver Carrito
+                                </Button>
+                            ) : (
+                                <Button
+                                    style="primary"
+                                    iconLeft={<IconShoppingCartPlus />}
+                                    className="w-full py-4 text-lg"
+                                    onClick={handleAddToCart}
+                                    disabled={agregando || !varianteSeleccionada || varianteSeleccionada.stock === 0}
+                                >
+                                    {varianteSeleccionada?.stock === 0
+                                        ? "Sin Stock"
+                                        : agregando ? "Agregando..." : "Agregar al Carrito"
+                                    }
+                                </Button>
+                            )}
                         </div>
 
                     </section>

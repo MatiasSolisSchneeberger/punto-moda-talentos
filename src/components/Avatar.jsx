@@ -1,19 +1,6 @@
 import React, { useMemo } from 'react';
 import { IconUser } from '@tabler/icons-react';
 
-/**
- * @typedef {Object} AvatarProps
- * @property {string} [img] - URL de la imagen del avatar.
- * @property {string} [name] - Nombre del usuario (se usa la primera letra si no hay imagen).
- * @property {boolean} [notification] - Muestra un punto de notificación rojo.
- * @property {boolean} [status] - Muestra un punto de estado verde.
- */
-
-/**
- * Componente Avatar de React.
- * Muestra una imagen, la inicial del nombre o un icono de usuario.
- * @param {AvatarProps} props
- */
 const Avatar = ({ img = false, name = false, notification = false, status = false, ...props }) => {
 
     // Lógica para determinar el contenido central del Avatar

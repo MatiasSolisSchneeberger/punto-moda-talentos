@@ -8,6 +8,7 @@ import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import Carrito from './pages/Carrito.jsx'
 import Wishlist from './pages/WishList.jsx'
+import Perfil from './pages/Perfil.jsx'
 
 function App() {
     // estado del usuario (null si no)
@@ -47,6 +48,7 @@ function App() {
                 <Route path="/login" element={<Login onLogin={handleLogin} />} />
                 <Route path="/register" element={<Register onRegister={handleLogin} />} />
                 <Route path="/wishlist" element={<Wishlist />} />
+                <Route path="/perfil" element={<Perfil />} />
             </Routes>
         </>
     )
